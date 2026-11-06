@@ -1,10 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: metallb-system
+namespace: openebs
 labels:
   - pairs:
-      app.kubernetes.io/name: metallb
-      app.kubernetes.io/component: loadbalancer
+      app.kubernetes.io/name: openebs-localpv-zfs
+      app.kubernetes.io/component: csi
       app.kubernetes.io/part-of: infrastructure
       app.kubernetes.io/managed-by: flux
       platform.shinoval.work/cluster: management
@@ -12,7 +12,5 @@ labels:
     includeSelectors: false
     includeTemplates: false
 resources:
-  - helmrepository.yaml
-  - helmrelease.yaml
-  - values.yaml
-  - namespace.yaml
+  - storageclass.yaml
+  - volumesnapshotclass.yaml

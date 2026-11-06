@@ -1,0 +1,137 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-localpv-zfs-retain-128k
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+parameters:
+  recordsize: "128k"
+  compression: "lz4"
+  dedup: "off"
+  fstype: "zfs"
+  poolname: "tank"
+  atime: "off"
+  thinProvision: "yes"
+  logbias: "throughput"
+  quotatype: "refquota"
+provisioner: zfs.csi.openebs.io
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-localpv-zfs-delete-128k
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+parameters:
+  recordsize: "128k"
+  compression: "lz4"
+  dedup: "off"
+  fstype: "zfs"
+  poolname: "tank"
+  atime: "off"
+  thinProvision: "yes"
+  logbias: "throughput"
+  quotatype: "refquota"
+provisioner: zfs.csi.openebs.io
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-localpv-zfs-retain-32k
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+parameters:
+  recordsize: "32k"
+  compression: "lz4"
+  dedup: "off"
+  fstype: "zfs"
+  poolname: "tank"
+  atime: "off"
+  thinProvision: "yes"
+  logbias: "throughput"
+  quotatype: "refquota"
+provisioner: zfs.csi.openebs.io
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-localpv-zfs-delete-32k
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+parameters:
+  recordsize: "32k"
+  compression: "lz4"
+  dedup: "off"
+  fstype: "zfs"
+  poolname: "tank"
+  atime: "off"
+  thinProvision: "yes"
+  logbias: "throughput"
+  quotatype: "refquota"
+provisioner: zfs.csi.openebs.io
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-localpv-zfs-retain-1m
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+parameters:
+  recordsize: "1m"
+  compression: "lz4"
+  dedup: "off"
+  fstype: "zfs"
+  poolname: "tank"
+  atime: "off"
+  thinProvision: "yes"
+  logbias: "throughput"
+  quotatype: "refquota"
+provisioner: zfs.csi.openebs.io
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-localpv-zfs-delete-1m
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+parameters:
+  recordsize: "1m"
+  compression: "lz4"
+  dedup: "off"
+  fstype: "zfs"
+  poolname: "tank"
+  atime: "off"
+  thinProvision: "yes"
+  logbias: "throughput"
+  quotatype: "refquota"
+provisioner: zfs.csi.openebs.io
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-localpv-zfs-block-retain
+provisioner: zfs.csi.openebs.io
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
+parameters:
+  poolname: "tank"
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-localpv-zfs-block-delete
+provisioner: zfs.csi.openebs.io
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+parameters:
+  poolname: "tank"

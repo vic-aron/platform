@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: lan-root-ca
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: "LAN Root CA"
+  secretName: lan-root-ca
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: lan-root-selfsigned
+    kind: ClusterIssuer
+    group: cert-manager.io

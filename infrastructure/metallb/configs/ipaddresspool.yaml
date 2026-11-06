@@ -1,0 +1,10 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: expensive
+  namespace: metallb-system
+spec:
+  addresses:
+    - 10.212.212.50-10.212.212.90
+  autoAssign: false
+  avoidBuggyIPs: true
