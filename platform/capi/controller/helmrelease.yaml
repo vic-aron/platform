@@ -8,7 +8,7 @@ spec:
   timeout: 5m
   chart:
     spec:
-      chart: capi-operator
+      chart: cluster-api-operator
       version: "1.14.2"
       sourceRef:
         kind: HelmRepository
