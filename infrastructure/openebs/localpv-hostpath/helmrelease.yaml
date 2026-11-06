@@ -1,0 +1,38 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openebs-localpv-hostpath
+  namespace: openebs
+spec:
+  interval: 15m
+  timeout: 5m
+  chart:
+    spec:
+      chart: localpv-provisioner
+      version: "4.6.x"
+      sourceRef:
+        kind: HelmRepository
+        name: openebs-localpv
+        namespace: openebs
+  releaseName: localpv-provisioner
+  targetNamespace: openebs
+  install:
+    createNamespace: true
+    crds: Create
+    strategy:
+      name: RetryOnFailure
+      retryInterval: 5m
+  upgrade:
+    crds: CreateReplace
+    strategy:
+      name: RetryOnFailure
+      retryInterval: 5m
+  test:
+    enable: true
+  driftDetection:
+    mode: enabled
+  valuesFrom:
+    - kind: ConfigMap
+      name: openebs-localpv-hostpath-values
+      valuesKey: values.yaml
+      optional: false

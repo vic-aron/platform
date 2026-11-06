@@ -1,0 +1,38 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: metallb
+  namespace: metallb-system
+spec:
+  interval: 15m
+  timeout: 5m
+  chart:
+    spec:
+      chart: metallb
+      version: "0.16.x"
+      sourceRef:
+        kind: HelmRepository
+        name: metallb
+        namespace: metallb-system
+  releaseName: metallb
+  targetNamespace: metallb-system
+  install:
+    createNamespace: true
+    crds: Create
+    strategy:
+      name: RetryOnFailure
+      retryInterval: 5m
+  upgrade:
+    crds: CreateReplace
+    strategy:
+      name: RetryOnFailure
+      retryInterval: 5m
+  test:
+    enable: true
+  driftDetection:
+    mode: enabled
+  valuesFrom:
+    - kind: ConfigMap
+      name: metallb-values
+      valuesKey: values.yaml
+      optional: false

@@ -1,0 +1,15 @@
+apiVersion: source.extensions.fluxcd.io/v1beta1
+kind: ArtifactGenerator
+metadata:
+  name: infrastructure
+  namespace: flux-system
+spec:
+  sources:
+    - alias: repo
+      kind: GitRepository
+      name: flux-system
+  artifacts:
+    - name: infrastructure
+      copy:
+        - from: "@repo/infrastructure/**"
+          to: "@artifact/infrastructure/"

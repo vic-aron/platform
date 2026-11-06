@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: openebs
+labels:
+  - pairs:
+      app.kubernetes.io/name: openebs-localpv-zfs
+      app.kubernetes.io/component: csi
+      app.kubernetes.io/part-of: infrastructure
+      app.kubernetes.io/managed-by: flux
+      platform.shinoval.work/cluster: management
+      platform.shinoval.work/environment: production
+    includeSelectors: false
+    includeTemplates: false
+resources:
+  - helmrelease.yaml
+  - helmrepository.yaml
+  - values.yaml

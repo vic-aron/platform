@@ -1,0 +1,71 @@
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: raid1
+---
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: zfs
+---
+apiVersion: v1alpha1
+kind: RAIDArrayConfig
+name: system
+level: raid1
+metadata: "1.0"
+provisioning:
+  volumeSelector:
+    match: disk.transport == "sata" && disk.pretty_size == "64 GB" && disk.model == "TS64GSSD370"
+---
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+provisioning:
+  diskSelector:
+    match: '"/dev/disk/by-id/md-name-talos:system" in disk.symlinks'
+  wipe: true
+---
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: STATE
+encryption:
+  provider: luks2
+  keys:
+    - tpm:
+        options:
+          pcrs: [7]
+      slot: 0
+    - nodeID: {}
+      slot: 1
+---
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+mount:
+  secure: true
+encryption:
+  provider: luks2
+  keys:
+    - tpm:
+        options:
+          pcrs: [7]
+      slot: 0
+      lockToState: true
+    - nodeID: {}
+      slot: 1
+      lockToState: true
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: cdi-scratch
+volumeType: directory
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: openebs
+volumeType: directory
+---
+apiVersion: v1alpha1
+kind: FilesystemTrimConfig
+interval: 168h0m0s
+---
+apiVersion: v1alpha1
+kind: FilesystemScrubConfig
+interval: 168h0m0s

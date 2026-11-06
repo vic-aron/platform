@@ -1,0 +1,33 @@
+# Vim artifacts
+Session.vim
+*.sw?
+*~
+
+# Temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Environment files
+.env
+.env.*
+*.env
+!*.env.example
+
+# Kubernetes state
+.kubeconfig
+kubeconfig
+*.kubeconfig
+
+# Talos state
+.talosconfig
+talosconfig
+*.talosconfig
+/rendered/
+/secret/
+
+# Kubernetes secrets
+*.secret
+!.secret.enc

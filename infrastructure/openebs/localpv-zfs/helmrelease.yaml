@@ -1,0 +1,38 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openebs-localpv-zfs
+  namespace: openebs
+spec:
+  interval: 15m
+  timeout: 5m
+  chart:
+    spec:
+      chart: zfs-localpv
+      version: "2.11.x"
+      sourceRef:
+        kind: HelmRepository
+        name: openebs-zfslocalpv
+        namespace: openebs
+  releaseName: zfs-localpv
+  targetNamespace: openebs
+  install:
+    createNamespace: true
+    crds: Create
+    strategy:
+      name: RetryOnFailure
+      retryInterval: 5m
+  upgrade:
+    crds: CreateReplace
+    strategy:
+      name: RetryOnFailure
+      retryInterval: 5m
+  test:
+    enable: true
+  driftDetection:
+    mode: enabled
+  valuesFrom:
+    - kind: ConfigMap
+      name: openebs-localpv-zfs-values
+      valuesKey: values.yaml
+      optional: false
