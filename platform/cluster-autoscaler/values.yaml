@@ -10,7 +10,7 @@ data:
     cloudProvider: clusterapi
     autoDiscovery:
       labels:
-        - cluster.x-k8s.io/cluster-api-autoscaler-enabled: true
+        - cluster.x-k8s.io/cluster-api-autoscaler-enabled: "true"
     clusterAPIMode: kubeconfig-incluster
     clusterAPIWorkloadKubeconfigPath: /etc/kubernetes/workload-kubeconfig
     rbac:
