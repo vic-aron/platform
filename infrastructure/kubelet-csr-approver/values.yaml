@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubelet-csr-approver-values
+  namespace: kube-system
+  labels:
+    reconcile.fluxcd.io/watch: Enabled
+data:
+  values.yaml: |
+    providerRegex: "^cp-0$"
+    maxExpirationSeconds: ""
+    bypassDnsResolution: true
+    allowedDnsNames: 1
+    ignoreNonSystemNode: false
+    skipDenyStep: false
+    bypassHostnameCheck: false
+    leaderElection: false
+    replicas: 1
