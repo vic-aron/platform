@@ -7,8 +7,11 @@ metadata:
 spec:
   certificateRotateStrategy: {}
   configuration:
+    ksmConfiguration:
+      nodeLabelSelector: {}
     developerConfiguration:
-      featureGates: []
+      featureGates:
+        - VMPersistentState
     imagePullPolicy: IfNotPresent
   customizeComponents: {}
   imagePullPolicy: IfNotPresent

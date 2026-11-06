@@ -13,5 +13,3 @@ labels:
     includeTemplates: false
 resources:
   - kubevirt-cr.yaml
-patches:
-  - path: patch.yaml

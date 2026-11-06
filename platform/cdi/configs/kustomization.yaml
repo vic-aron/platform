@@ -15,5 +15,3 @@ resources:
   - cdi-cr.yaml
   - service.yaml
   - storageprofile.yaml
-patches:
-  - path: patch.yaml
