@@ -15,4 +15,3 @@ resources:
   - helmrepository.yaml
   - helmrelease.yaml
   - values.yaml
-  - namespace.yaml
