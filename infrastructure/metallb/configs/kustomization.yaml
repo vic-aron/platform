@@ -13,4 +13,4 @@ labels:
     includeTemplates: false
 resources:
   - ipaddresspool.yaml
-  - ö2advertisement.yaml
+  - l2advertisement.yaml
