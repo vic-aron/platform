@@ -1,0 +1,96 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kubevirt
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: ExternalArtifact
+    name: platform
+  path: "./platform/kubevirt"
+  prune: true
+  wait: true
+  timeout: 5m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cdi
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: ExternalArtifact
+    name: platform
+  path: "./platform/cdi/controller"
+  prune: true
+  wait: true
+  timeout: 5m
+  dependsOn:
+    - name: kubevirt
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cdi-configs
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: ExternalArtifact
+    name: platform
+  path: "./platform/cdi/configs"
+  prune: true
+  wait: true
+  timeout: 5m
+  dependsOn:
+    - name: cdi
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: capi
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: ExternalArtifact
+    name: platform
+  path: "./platform/capi/controller"
+  prune: true
+  wait: true
+  timeout: 5m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: capi-provider
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: ExternalArtifact
+    name: platform
+  path: "./platform/capi/configs"
+  prune: true
+  wait: true
+  timeout: 5m
+  dependsOn:
+    - name: kubevirt
+    - name: capi
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-autoscaler
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: ExternalArtifact
+    name: platform
+  path: "./platform/cluster-autoscaler"
+  prune: true
+  wait: true
+  timeout: 5m

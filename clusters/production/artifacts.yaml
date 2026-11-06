@@ -13,3 +13,19 @@ spec:
       copy:
         - from: "@repo/infrastructure/**"
           to: "@artifact/infrastructure/"
+---
+apiVersion: source.extensions.fluxcd.io/v1beta1
+kind: ArtifactGenerator
+metadata:
+  name: platform
+  namespace: flux-system
+spec:
+  sources:
+    - alias: repo
+      kind: GitRepository
+      name: flux-system
+  artifacts:
+    - name: platform
+      copy:
+        - from: "@repo/platform/**"
+          to: "@artifact/platform/"
