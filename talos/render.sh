@@ -9,7 +9,13 @@ CLUSTER_ENDPOINT="https://10.212.212.10:6443"
 ADDITIONAL_SANS="kube.home.arpa"
 NODE_IP="10.212.212.10"
 
-SCHEMATIC_ID=$(curl -X POST --data-binary @schematic.yaml https://factory.talos.dev/schematics)
+#SCHEMATIC_ID=$(curl -X POST --data-binary @schematic.yaml https://factory.talos.dev/schematics)
+SCHEMATIC_ID=$(
+  curl -fsSL -X POST \
+    --data-binary @schematic.yaml \
+    https://factory.talos.dev/schematics |
+    jq -r '.id'
+)
 INSTALL_IMAGE="factory.talos.dev/metal-installer-secureboot/${SCHEMATIC_ID}:${TALOS_VERSION}"
 
 RENDER_DIR="./rendered"

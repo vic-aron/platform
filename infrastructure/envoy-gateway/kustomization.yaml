@@ -15,3 +15,4 @@ resources:
   - ocirepository.yaml
   - helmrelease.yaml
   - values.yaml
+  - namespace.yaml

@@ -25,8 +25,8 @@ kubeconfig
 .talosconfig
 talosconfig
 *.talosconfig
-/rendered/
-/secret/
+**/rendered/
+**/secret/
 
 # Kubernetes secrets
 *.secret
