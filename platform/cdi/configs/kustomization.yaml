@@ -14,4 +14,3 @@ labels:
 resources:
   - cdi-cr.yaml
   - service.yaml
-  - storageprofile.yaml

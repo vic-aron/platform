@@ -1,7 +1,7 @@
 apiVersion: cdi.kubevirt.io/v1beta1
 kind: StorageProfile
 metadata:
-  name: hostpath-provisioner
+  name: openebs-localpv-zfs-block-delete
 spec:
   claimPropertySets:
     - accessModes:
