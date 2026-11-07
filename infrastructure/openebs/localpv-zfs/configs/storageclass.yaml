@@ -121,7 +121,7 @@ metadata:
 provisioner: zfs.csi.openebs.io
 allowVolumeExpansion: true
 reclaimPolicy: Retain
-volumeBindingMode: WaitForFirstConsumer
+volumeBindingMode: Immediate
 parameters:
   poolname: "tank"
 ---
@@ -132,6 +132,6 @@ metadata:
 provisioner: zfs.csi.openebs.io
 allowVolumeExpansion: true
 reclaimPolicy: Delete
-volumeBindingMode: WaitForFirstConsumer
+volumeBindingMode: Immediate
 parameters:
   poolname: "tank"
