@@ -21,6 +21,20 @@ metadata:
   namespace: virtual-machines
 spec:
   runStrategy: Always
+  dataVolumeTemplates:
+    - metadata:
+        name: os-volume
+      spec:
+        source:
+          pvc:
+            name: DataVolume
+            namespace: debian-13-cloudimage
+        storage:
+          storageClassName: openebs-local-pv-zfs-block-delete
+          volumeMode: Block
+          resources:
+            requests:
+              storage: 10Gi
   template:
     spec:
       domain:
