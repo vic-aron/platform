@@ -1,0 +1,34 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: virtual-machines-namespace
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: ExternalArtifact
+    name: virtual-machines
+  path: "./virtual-machines/namespace"
+  prune: true
+  wait: true
+  timeout: 5m
+  dependsOn:
+    - name: kubevirt
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: wireguard
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: ExternalArtifact
+    name: virtual-machines
+  path: "./virtual-machines/wireguard"
+  prune: true
+  wait: true
+  timeout: 5m
+  dependsOn:
+    - name: kubevirt
+    - name: virtual-machines-namespace

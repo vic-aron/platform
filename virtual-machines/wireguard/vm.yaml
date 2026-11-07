@@ -1,0 +1,129 @@
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: debian-13-cloudimage
+  namespace: virtual-machines
+spec:
+  source:
+    http:
+      url: https://cloud.debian.org/images/cloud/trixie/20261103-2651/debian-13-genericcloud-amd64-20261103-2651.qcow2
+  storage:
+    storageClassName: openebs-localpv-zfs-block-delete
+    volumeMode: Block
+    resources:
+      requests:
+        storage: 10Gi
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: wireguard
+  namespace: virtual-machines
+spec:
+  template:
+    spec:
+      domain:
+        cpu:
+          cores: 2
+        memory:
+          guest: 4Gi
+        machine:
+          type: q35
+        features:
+          kvm:
+            hidden: false
+        firmware:
+          bootloader:
+            efi:
+              persistent: true
+              secureBoot: false
+        devices:
+          networkInterfaceMultiqueue: true
+          autoattachGraphicsDevice: false
+          autoattachMemBalloon: false
+          rng: {}
+          watchdog:
+            name: watchdog
+            i6300esb:
+              action: reset
+          interfaces:
+            - name: eth0
+              bridge: {}
+          disks:
+            - name: os-disk
+              disk:
+                bus: virtio
+              serial: kubevirt-os
+              bootOrder: 1
+            - name: ci-disk
+              disk:
+                bus: virtio
+      networks:
+        - name: eth0
+          pod: {}
+      volumes:
+        - name: os-disk
+          dataVolume:
+            name: os-volume
+        - name: ci-disk
+          cloudInitNoCloud:
+            secretRef:
+              name: wireguard-cloudinit
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: wireguard-cloudinit
+  namespace: virtual-machines
+type: Opaque
+stringData:
+  userdata: |
+    #cloud-config
+    hostname: wireguard
+
+    # Users
+    users:
+      - name: daniel
+        groups: [sudo]
+        shell: /bin/bash
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        ssh_authorized_keys:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPRP7m16Hk4/rPlbBt31Jo2o5Be8JdUZUJr1dYVrTLQn daniel
+
+    # Keyboard
+    keyboard:
+      layout: de
+      model: pc105
+      variant: nodeadkeys
+
+    # Locales
+    locale: en_US.UTF-8
+    timezone: Europe/Berlin
+
+    # Packages
+    package_update: true
+    packages:
+      # Networking
+      - wireguard
+      - wireguard-tools
+      - curl
+      - wget
+      - dnsutils
+      - iproute2
+      - traceroute
+
+      # System utilities
+      - qemu-guest-agent
+      - sudo
+      - vim
+      - git
+      - htop
+      - tmux
+      - rsync
+      - unzip
+      - bash-completion
+
+      # Security
+      - ca-certificates
+      - openssh-server
+      - nftables
