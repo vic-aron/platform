@@ -31,5 +31,5 @@ spec:
   timeout: 5m
   dependsOn:
     - name: kubevirt
-    - name: cdi-storageprofiles
+    - name: cdi-configs
     - name: virtual-machines-namespace

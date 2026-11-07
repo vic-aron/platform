@@ -12,6 +12,8 @@ spec:
   prune: true
   wait: true
   timeout: 5m
+  dependsOn:
+    - name: cdi-configs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -28,7 +30,6 @@ spec:
   wait: true
   timeout: 5m
   dependsOn:
-    - name: kubevirt
     - name: openebs-localpv-zfs-configs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -47,6 +48,7 @@ spec:
   timeout: 5m
   dependsOn:
     - name: cdi
+    - name: openebs-localpv-hostpath-configs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -96,4 +98,5 @@ spec:
   timeout: 5m
   dependsOn:
     - name: kubevirt
-    - name: capi
+    - name: cdi-configs
+    - name: capi-configs

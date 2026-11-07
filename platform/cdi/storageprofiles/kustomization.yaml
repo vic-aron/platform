@@ -13,3 +13,4 @@ labels:
     includeTemplates: false
 resources:
   - storageprofile.yaml
+  - service.yaml
