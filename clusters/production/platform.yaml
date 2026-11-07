@@ -85,7 +85,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: capi-provider
+  name: capi-configs
   namespace: flux-system
 spec:
   interval: 10m
@@ -99,4 +99,4 @@ spec:
   dependsOn:
     - name: kubevirt
     - name: cdi-configs
-    - name: capi-configs
+    - name: capi
