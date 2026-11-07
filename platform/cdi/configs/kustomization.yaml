@@ -12,4 +12,3 @@ labels:
     includeTemplates: false
 resources:
   - cdi-cr.yaml
-  - service.yaml
