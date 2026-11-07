@@ -38,6 +38,10 @@ spec:
             requests:
               storage: 10Gi
   template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: wireguard
+        app.kubernetes.io/component: vpn
     spec:
       domain:
         cpu:
@@ -144,3 +148,20 @@ stringData:
       - ca-certificates
       - openssh-server
       - nftables
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wireguard
+  namespace: virtual-machines
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.212.212.55
+  selector:
+    app.kubernetes.io/name: wireguard
+    app.kubernetes.io/component: vpn
+  ports:
+    - name: ssh
+      port: 22
+      targetPort: 22
+      protocol: TCP
