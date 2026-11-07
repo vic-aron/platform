@@ -31,6 +31,8 @@ spec:
             namespace: virtual-machines
         storage:
           storageClassName: openebs-local-pv-zfs-block-delete
+          accessModes:
+            - ReadWriteOnce
           volumeMode: Block
           resources:
             requests:
