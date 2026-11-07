@@ -30,7 +30,7 @@ spec:
             name: debian-13-cloudimage
             namespace: virtual-machines
         storage:
-          storageClassName: openebs-local-pv-zfs-block-delete
+          storageClassName: openebs-localpv-zfs-block-delete
           accessModes:
             - ReadWriteOnce
           volumeMode: Block
