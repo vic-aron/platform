@@ -79,18 +79,3 @@ spec:
   dependsOn:
     - name: kubevirt
     - name: capi
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: cluster-autoscaler
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: platform
-  path: "./platform/cluster-autoscaler"
-  prune: true
-  wait: true
-  timeout: 5m
