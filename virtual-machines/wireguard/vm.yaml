@@ -27,8 +27,8 @@ spec:
       spec:
         source:
           pvc:
-            name: DataVolume
-            namespace: debian-13-cloudimage
+            name: debian-13-cloudimage
+            namespace: virtual-machines
         storage:
           storageClassName: openebs-local-pv-zfs-block-delete
           volumeMode: Block
