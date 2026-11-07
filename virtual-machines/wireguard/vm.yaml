@@ -158,8 +158,7 @@ spec:
   type: LoadBalancer
   loadBalancerIP: 10.212.212.55
   selector:
-    app.kubernetes.io/name: wireguard
-    app.kubernetes.io/component: vpn
+    vm.kubevirt.io/name: wireguard
   ports:
     - name: ssh
       port: 22
