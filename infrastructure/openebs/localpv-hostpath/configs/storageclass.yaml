@@ -11,4 +11,4 @@ metadata:
         value: /var/mnt/cdi-scratch
 provisioner: openebs.io/local
 reclaimPolicy: Delete
-volumeBindingMode: Immediate
+volumeBindingMode: WaitForFirstConsumer
