@@ -123,24 +123,36 @@ stringData:
 
     # Debian repositories
     runcmd:
-      - |
-        set -eu
-
-        for source in /etc/apt/sources.list.d/*.sources; do
-          [ -f "$source" ] || continue
-
-          sed -i '/^Components:/ {
-            /contrib/! s/$/ contrib/
-            /non-free-firmware/! s/$/ non-free-firmware/
-          }' "$source"
-        done
-
       # Services
       - [systemctl, enable, --now, qemu-guest-agent.service]
       - [systemctl, enable, --now, nfs-kernel-server.service]
 
+    # APT
+    apt:
+      preserve_source_list: true
+      sources_list: |
+        Types: deb
+        URIs: http://deb.debian.org/debian
+        Suites: trixie trixie-updates
+        Components: main contrib non-free-firmware
+        Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+        Types: deb deb-src
+        URIs: mirror+file:///etc/apt/mirrors/debian.list
+        Suites: trixie trixie-updates trixie-backports
+        Components: main contrib non-free-firmware
+        Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+        Types: deb deb-src
+        URIs: mirror+file:///etc/apt/mirrors/debian-security.list
+        Suites: trixie-security
+        Components: main contrib non-free-firmware
+        Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
     # Packages
+    package_reboot_if_required: true
     package_update: true
+    package_upgrade: true
     packages:
       # Networking
       - curl
@@ -169,8 +181,8 @@ stringData:
       - pciutils
 
       # ZFS
-      - linux-image-cloud-amd64
-      - linux-headers-cloud-amd64
+      - linux-image-amd64
+      - linux-headers-amd64
       - zfs-dkms
       - zfs-zed
       - zfsutils-linux
