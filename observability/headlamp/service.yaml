@@ -17,5 +17,5 @@ spec:
   ports:
     - name: https
       port: 80
-      targetPort: 80
+      targetPort: 4466
       protocol: TCP
