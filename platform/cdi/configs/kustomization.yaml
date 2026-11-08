@@ -12,3 +12,5 @@ labels:
     includeTemplates: false
 resources:
   - cdi-cr.yaml
+patches:
+  - path: patch.yaml

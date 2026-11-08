@@ -4,14 +4,6 @@ metadata:
   name: cdi
 spec:
   config:
-    podResourceRequirements:
-      limits:
-        cpu: "4"
-        memory: "1Gi"
-      requests:
-        cpu: "1"
-        memory: "250Mi"
-    scratchSpaceStorageClass: openebs-localpv-hostpath
     featureGates:
       - HonorWaitForFirstConsumer
   imagePullPolicy: IfNotPresent

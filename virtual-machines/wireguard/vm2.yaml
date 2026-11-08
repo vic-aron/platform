@@ -1,0 +1,175 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: fileserver
+  namespace: virtual-machines
+spec:
+  runStrategy: Always
+  dataVolumeTemplates:
+    - metadata:
+        name: os-volume
+      spec:
+        source:
+          pvc:
+            name: debian-13-cloudimage
+            namespace: virtual-machines
+        storage:
+          storageClassName: openebs-localpv-zfs-block-delete
+          accessModes:
+            - ReadWriteOnce
+          volumeMode: Block
+          resources:
+            requests:
+              storage: 10Gi
+  template:
+    metadata:
+      labels:
+        kubevirt.io/vm: fileserver
+        app.kubernetes.io/name: fileserver
+        app.kubernetes.io/component: fileserver
+    spec:
+      domain:
+        clock:
+          utc: {}
+        resources:
+          requests:
+            cpu: 2
+            memory: 9Gi
+        cpu:
+          cores: 2
+          model: host-passthrough
+        memory:
+          guest: 8Gi
+        machine:
+          type: q35
+        features:
+          smm:
+            enabled: false
+          kvm:
+            hidden: false
+        firmware:
+          bootloader:
+            efi:
+              persistent: true
+              secureBoot: false
+        devices:
+          hostDevices:
+            - name: hba
+              deviceName: devices.kubevirt.io/hba
+          autoattachVSOCK: true
+          networkInterfaceMultiqueue: true
+          autoattachGraphicsDevice: false
+          autoattachMemBalloon: false
+          rng: {}
+          watchdog:
+            name: watchdog
+            i6300esb:
+              action: reset
+          interfaces:
+            - name: eth0
+              bridge: {}
+          disks:
+            - name: os-disk
+              disk:
+                bus: virtio
+              serial: kubevirt-os
+              bootOrder: 1
+            - name: ci-disk
+              disk:
+                bus: virtio
+      networks:
+        - name: eth0
+          pod: {}
+      volumes:
+        - name: os-disk
+          dataVolume:
+            name: os-volume
+        - name: ci-disk
+          cloudInitNoCloud:
+            secretRef:
+              name: fileserver-cloudinit
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fileserver-cloudinit
+  namespace: virtual-machines
+type: Opaque
+stringData:
+  userdata: |
+    #cloud-config
+    hostname: fileserver
+
+    # Users
+    users:
+      - name: daniel
+        groups: [sudo]
+        shell: /bin/bash
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        ssh_authorized_keys:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPRP7m16Hk4/rPlbBt31Jo2o5Be8JdUZUJr1dYVrTLQn daniel
+
+    # Keyboard
+    keyboard:
+      layout: de
+      model: pc105
+      variant: nodeadkeys
+
+    # Locales
+    locale: en_US.UTF-8
+    timezone: Europe/Berlin
+
+    # Packages
+    package_update: true
+    packages:
+      # Networking
+      - curl
+      - wget
+      - dnsutils
+      - iproute2
+      - traceroute
+
+      # System utilities
+      - qemu-guest-agent
+      - sudo
+      - vim
+      - git
+      - htop
+      - tmux
+      - rsync
+      - unzip
+      - bash-completion
+      - bat
+      - eza
+      - zfsutils-linux
+
+      # Security
+      - ca-certificates
+      - openssh-server
+      - nftables
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fileserver
+  namespace: virtual-machines
+  annotations:
+    metallb.io/loadBalancerIPs: 10.212.212.56
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Cluster
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 3600
+  selector:
+    vm.kubevirt.io/name: fileserver
+  ports:
+    - name: ssh
+      port: 22
+      targetPort: 22
+      protocol: TCP
+    - name: nfs
+      port: 2049
+      targetPort: 2049
+      protocol: TCP

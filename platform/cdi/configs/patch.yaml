@@ -1,0 +1,23 @@
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: CDI
+metadata:
+  name: cdi
+spec:
+  config:
+    podResourceRequirements:
+      requests:
+        cpu: 1
+        memory: 256Mi
+      limits:
+        cpu: 2
+        memory: 2Gi
+    scratchSpaceStorageClass: openebs-localpv-hostpath
+    featureGates:
+      - HonorWaitForFirstConsumer
+  imagePullPolicy: IfNotPresent
+  infra:
+    nodeSelector:
+      kubernetes.io/os: linux
+  workload:
+    nodeSelector:
+      kubernetes.io/os: linux

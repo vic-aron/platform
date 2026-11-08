@@ -18,10 +18,31 @@ spec:
           apt-get install -y \
             zfsutils-linux \
             util-linux \
+            fdisk \
             gdisk \
             parted \
+            smartmontools \
+            usbutils \
+            dmidecode \
+            sg3-utils \
+            cryptsetup \
+            lvm2 \
+            mdadm \
+            ethtool \
+            iproute2 \
+            kmod \
+            udev \
+            hdparm \
+            nvme-cli \
+            vim \
+            less \
+            procps \
+            file \
+            strace \
+            lsscsi \
+            pciutils \
+            bash-completion
           exec sleep infinity
-      #command: ["sleep", "infinity"]
       securityContext:
         privileged: true
       volumeMounts:

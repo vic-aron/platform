@@ -12,11 +12,12 @@ $patch: delete
 ---
 apiVersion: v1alpha1
 kind: KubeNodeConfig
-nodeIP: {}
+nodeIP:
+  validSubnets:
+    - 10.212.212.0/24
 labels:
   kube-ovn/role: "master"
   node-role.kubernetes.io/control-plane: ""
-  node.kubernetes.io/exclude-from-external-load-balancers: ""
 ---
 apiVersion: v1alpha1
 kind: KubeletConfig

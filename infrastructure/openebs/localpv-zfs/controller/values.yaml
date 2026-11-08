@@ -10,4 +10,4 @@ data:
     zfsController:
       replicas: 1
     zfsNode:
-      encrKeysDir: "/var/mnt/openebs/keys"
+      encrKeysDir: "/var/mnt/openebs-keys/keys"

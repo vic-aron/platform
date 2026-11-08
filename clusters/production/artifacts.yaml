@@ -45,3 +45,19 @@ spec:
       copy:
         - from: "@repo/virtual-machines/**"
           to: "@artifact/virtual-machines/"
+---
+apiVersion: source.extensions.fluxcd.io/v1beta1
+kind: ArtifactGenerator
+metadata:
+  name: observability
+  namespace: flux-system
+spec:
+  sources:
+    - alias: repo
+      kind: GitRepository
+      name: flux-system
+  artifacts:
+    - name: observability
+      copy:
+        - from: "@repo/observability/**"
+          to: "@artifact/observability/"

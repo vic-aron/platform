@@ -20,7 +20,6 @@ INSTALL_IMAGE="factory.talos.dev/metal-installer-secureboot/${SCHEMATIC_ID}:${TA
 
 RENDER_DIR="./rendered"
 SECRET_DIR="./secret"
-COMMON_PATCH_DIR="./patches/common"
 NODE_PATCH_DIR="./patches/nodes"
 
 mkdir -p \

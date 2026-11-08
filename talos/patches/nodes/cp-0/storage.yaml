@@ -7,6 +7,14 @@ kind: KernelModuleConfig
 name: zfs
 ---
 apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: vfio_pci
+---
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: vfio_iommu_type1
+---
+apiVersion: v1alpha1
 kind: RAIDArrayConfig
 name: system
 level: raid1
@@ -59,7 +67,12 @@ volumeType: directory
 ---
 apiVersion: v1alpha1
 kind: UserVolumeConfig
-name: openebs
+name: openebs-keys
+volumeType: directory
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: zfs-keys
 volumeType: directory
 ---
 apiVersion: v1alpha1
@@ -69,3 +82,8 @@ interval: 168h0m0s
 apiVersion: v1alpha1
 kind: FilesystemScrubConfig
 interval: 168h0m0s
+---
+apiVersion: v1alpha1
+kind: PCIDriverRebindConfig
+name: 0000:01:00.0
+targetDriver: vfio-pci

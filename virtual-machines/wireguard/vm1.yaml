@@ -9,6 +9,8 @@ spec:
       url: https://cloud.debian.org/images/cloud/trixie/20261103-2651/debian-13-genericcloud-amd64-20261103-2651.qcow2
   storage:
     storageClassName: openebs-localpv-zfs-block-delete
+    accessModes:
+      - ReadWriteOnce
     volumeMode: Block
     resources:
       requests:
@@ -40,17 +42,27 @@ spec:
   template:
     metadata:
       labels:
+        kubevirt.io/vm: wireguard
         app.kubernetes.io/name: wireguard
         app.kubernetes.io/component: vpn
     spec:
       domain:
+        clock:
+          utc: {}
+        resources:
+          requests:
+            cpu: 2
+            memory: 5Gi
         cpu:
           cores: 2
+          model: host-passthrough
         memory:
           guest: 4Gi
         machine:
           type: q35
         features:
+          smm:
+            enabled: false
           kvm:
             hidden: false
         firmware:
@@ -59,6 +71,7 @@ spec:
               persistent: true
               secureBoot: false
         devices:
+          autoattachVSOCK: true
           networkInterfaceMultiqueue: true
           autoattachGraphicsDevice: false
           autoattachMemBalloon: false
@@ -69,7 +82,7 @@ spec:
               action: reset
           interfaces:
             - name: eth0
-              bridge: {}
+              bridge: {} # masquerade: {}
           disks:
             - name: os-disk
               disk:
@@ -143,6 +156,8 @@ stringData:
       - rsync
       - unzip
       - bash-completion
+      - bat
+      - eza
 
       # Security
       - ca-certificates
@@ -154,9 +169,15 @@ kind: Service
 metadata:
   name: wireguard
   namespace: virtual-machines
+  annotations:
+    metallb.io/loadBalancerIPs: 10.212.212.55
 spec:
   type: LoadBalancer
-  loadBalancerIP: 10.212.212.55
+  externalTrafficPolicy: Cluster
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 3600
   selector:
     vm.kubevirt.io/name: wireguard
   ports:
@@ -164,3 +185,7 @@ spec:
       port: 22
       targetPort: 22
       protocol: TCP
+    - name: wireguard
+      port: 51820
+      targetPort: 51820
+      protocol: UDP

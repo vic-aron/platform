@@ -1,0 +1,28 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kube-prom-stack
+  namespace: monitoring
+spec:
+  interval: 15m
+  timeout: 5m
+  chartRef:
+    kind: OCIRepository
+    name: kube-prom-stack
+    namespace: monitoring
+  releaseName: kube-prometheus-stack
+  install:
+    createNamespace: true
+    crds: Create
+    strategy:
+      name: RetryOnFailure
+      retryInterval: 5m
+  upgrade:
+    crds: CreateReplace
+    strategy:
+      name: RetryOnFailure
+      retryInterval: 5m
+  test:
+    enable: true
+  driftDetection:
+    mode: enabled

@@ -1,4 +1,7 @@
 customization:
+  extraKernelArgs:
+    - amd_iommu=on
+    - iommu=pt
   systemExtensions:
     officialExtensions:
       - siderolabs/amd-ucode

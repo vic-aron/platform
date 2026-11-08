@@ -12,4 +12,6 @@ labels:
     includeSelectors: false
     includeTemplates: false
 resources:
-  - vm.yaml
+  - vm1.yaml
+  - vm2.yaml
+  - vm3.yaml

@@ -1,0 +1,36 @@
+---
+apiVersion: kubevirt.io/v1
+kind: KubeVirt
+metadata:
+  name: kubevirt
+  namespace: kubevirt
+spec:
+  infra:
+    replicas: 1
+  certificateRotateStrategy: {}
+  configuration:
+    smbios:
+      sku: "TalosCloud"
+      version: "v0.1.0"
+      manufacturer: "Talos Virtualization"
+      product: "talosvm"
+      family: "ccio"
+    permittedHostDevices:
+      pciHostDevices:
+        - pciVendorSelector: "1000:0072"
+          resourceName: "devices.kubevirt.io/hba"
+    cpuModel: host-passthrough
+    ksmConfiguration:
+      nodeLabelSelector: {}
+    architectureConfiguration:
+      amd64:
+        machineType: q35
+    vmStateStorageClass: openebs-localpv-zfs-block-delete
+    developerConfiguration:
+      featureGates:
+        - VMPersistentState
+        - VSOCK
+    imagePullPolicy: IfNotPresent
+  customizeComponents: {}
+  imagePullPolicy: IfNotPresent
+  workloadUpdateStrategy: {}

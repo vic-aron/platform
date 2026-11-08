@@ -1,3 +1,4 @@
+---
 apiVersion: kubevirt.io/v1
 kind: KubeVirt
 metadata:
@@ -6,11 +7,8 @@ metadata:
 spec:
   certificateRotateStrategy: {}
   configuration:
-    ksmConfiguration:
-      nodeLabelSelector: {}
     developerConfiguration:
-      featureGates:
-        - VMPersistentState
+      featureGates: []
     imagePullPolicy: IfNotPresent
   customizeComponents: {}
   imagePullPolicy: IfNotPresent

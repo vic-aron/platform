@@ -7,4 +7,5 @@ spec:
     - accessModes:
         - ReadWriteOnce
       volumeMode: Block
+  snapshotClass: openebs-localpv-zfs-snapclass
   cloneStrategy: snapshot
