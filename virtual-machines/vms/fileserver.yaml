@@ -51,7 +51,7 @@ spec:
         firmware:
           bootloader:
             efi:
-              persistent: false
+              persistent: true
               secureBoot: false
         devices:
           hostDevices:
@@ -59,6 +59,7 @@ spec:
               deviceName: devices.kubevirt.io/hba
           autoattachVSOCK: true
           networkInterfaceMultiqueue: true
+          autoattachSerialConsole: true
           autoattachGraphicsDevice: false
           autoattachMemBalloon: false
           rng: {}
@@ -120,6 +121,24 @@ stringData:
     locale: en_US.UTF-8
     timezone: Europe/Berlin
 
+    # Debian repositories
+    runcmd:
+      - |
+        set -eu
+
+        for source in /etc/apt/sources.list.d/*.sources; do
+          [ -f "$source" ] || continue
+
+          sed -i '/^Components:/ {
+            /contrib/! s/$/ contrib/
+            /non-free-firmware/! s/$/ non-free-firmware/
+          }' "$source"
+        done
+
+      # Services
+      - [systemctl, enable, --now, qemu-guest-agent.service]
+      - [systemctl, enable, --now, nfs-kernel-server.service]
+
     # Packages
     package_update: true
     packages:
@@ -132,6 +151,7 @@ stringData:
 
       # System utilities
       - qemu-guest-agent
+      - locales
       - sudo
       - vim
       - git
@@ -142,12 +162,31 @@ stringData:
       - bash-completion
       - bat
       - eza
+      - util-linux
+      - procps
+      - coreutils
+      - kmod
+      - pciutils
+
+      # ZFS
+      - linux-image-cloud-amd64
+      - linux-headers-cloud-amd64
+      - zfs-dkms
+      - zfs-zed
       - zfsutils-linux
+      - nfs-kernel-server
 
       # Security
       - ca-certificates
       - openssh-server
       - nftables
+
+    write_files:
+      - path: /etc/modules-load.d/zfs.conf
+        owner: root:root
+        permissions: '0644'
+        content: |
+          zfs
 ---
 apiVersion: v1
 kind: Service

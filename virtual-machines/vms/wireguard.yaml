@@ -30,6 +30,7 @@ spec:
     spec:
       domain:
         clock:
+          timer: {}
           utc: {}
         resources:
           requests:
@@ -55,6 +56,7 @@ spec:
         devices:
           autoattachVSOCK: true
           networkInterfaceMultiqueue: true
+          autoattachSerialConsole: true
           autoattachGraphicsDevice: false
           autoattachMemBalloon: false
           rng: {}
@@ -116,6 +118,22 @@ stringData:
     locale: en_US.UTF-8
     timezone: Europe/Berlin
 
+    # Debian repositories
+    runcmd:
+      - |
+        set -eu
+
+        for source in /etc/apt/sources.list.d/*.sources; do
+          [ -f "$source" ] || continue
+
+          sed -i '/^Components:/ {
+            /contrib/! s/$/ contrib/
+            /non-free-firmware/! s/$/ non-free-firmware/
+          }' "$source"
+        done
+
+      - [systemctl, enable, --now, qemu-guest-agent.service]
+
     # Packages
     package_update: true
     packages:
@@ -130,6 +148,7 @@ stringData:
 
       # System utilities
       - qemu-guest-agent
+      - locales
       - sudo
       - vim
       - git
@@ -140,6 +159,11 @@ stringData:
       - bash-completion
       - bat
       - eza
+      - util-linux
+      - procps
+      - coreutils
+      - kmod
+      - pciutils
 
       # Security
       - ca-certificates
