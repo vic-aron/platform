@@ -13,9 +13,9 @@ spec:
     clientIP:
       timeoutSeconds: 3600
   selector:
-    cdi.kubevirt.io: cdi-uploadproxy
+    app.kubernetes.io/name: headlamp
   ports:
     - name: https
-      port: 443
-      targetPort: 8443
+      port: 80
+      targetPort: 80
       protocol: TCP
