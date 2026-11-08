@@ -18,19 +18,19 @@ spec:
     services: "20"
     count/virtualmachines.kubevirt.io: "20"
     count/datavolumes.cdi.kubevirt.io: "20"
----
-apiVersion: v1
-kind: LimitRange
-metadata:
-  name: virtual-machines
-  namespace: virtual-machines
-spec:
-  limits:
-    - type: PersistentVolumeClaim
-      min:
-        storage: 1Gi
-      max:
-        storage: 500Gi
+#---
+#apiVersion: v1
+#kind: LimitRange
+#metadata:
+#  name: virtual-machines
+#  namespace: virtual-machines
+#spec:
+#  limits:
+#    - type: PersistentVolumeClaim
+#      min:
+#        storage: 1Gi
+#      max:
+#        storage: 500Gi
 #---
 #apiVersion: networking.k8s.io/v1
 #kind: NetworkPolicy
