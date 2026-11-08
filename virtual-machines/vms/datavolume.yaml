@@ -1,12 +1,30 @@
 apiVersion: cdi.kubevirt.io/v1beta1
 kind: DataVolume
 metadata:
-  name: debian-13-cloudimage
+  name: debian-13-cloudimage-genericcloud
   namespace: virtual-machines
 spec:
   source:
     http:
       url: https://cloud.debian.org/images/cloud/trixie/20261103-2651/debian-13-genericcloud-amd64-20261103-2651.qcow2
+  storage:
+    storageClassName: openebs-localpv-zfs-block-delete
+    accessModes:
+      - ReadWriteOnce
+    volumeMode: Block
+    resources:
+      requests:
+        storage: 10Gi
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: debian-13-cloudimage-generic
+  namespace: virtual-machines
+spec:
+  source:
+    http:
+      url: https://cloud.debian.org/images/cloud/trixie/20261103-2651/debian-13-generic-amd64-20261103-2651.qcow2
   storage:
     storageClassName: openebs-localpv-zfs-block-delete
     accessModes:

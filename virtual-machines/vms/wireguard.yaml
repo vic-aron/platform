@@ -11,7 +11,7 @@ spec:
       spec:
         source:
           pvc:
-            name: debian-13-cloudimage
+            name: debian-13-cloudimage-genriccloud
             namespace: virtual-machines
         storage:
           storageClassName: openebs-localpv-zfs-block-delete
@@ -49,9 +49,7 @@ spec:
             hidden: false
         firmware:
           bootloader:
-            efi:
-              persistent: false
-              secureBoot: false
+            bios: {}
         devices:
           autoattachVSOCK: true
           networkInterfaceMultiqueue: true
