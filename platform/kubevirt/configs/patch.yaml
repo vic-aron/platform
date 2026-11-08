@@ -28,6 +28,7 @@ spec:
     vmStateStorageClass: openebs-localpv-zfs-block-delete
     developerConfiguration:
       featureGates:
+        - HostDevices
         - VMPersistentState
         - VSOCK
     imagePullPolicy: IfNotPresent
