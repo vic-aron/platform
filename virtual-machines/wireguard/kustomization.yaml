@@ -15,3 +15,4 @@ resources:
   - vm1.yaml
   - vm2.yaml
   - vm3.yaml
+  - datavolume.yaml
