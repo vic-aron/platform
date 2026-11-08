@@ -9,13 +9,3 @@ spec:
       volumeMode: Block
   snapshotClass: openebs-localpv-zfs-snapclass
   cloneStrategy: snapshot
----
-apiVersion: cdi.kubevirt.io/v1beta1
-kind: StorageProfile
-metadata:
-  name: openebs-localpv-zfs-vm-state
-spec:
-  claimPropertySets:
-    - accessModes:
-        - ReadWriteOnce
-      volumeMode: Filesystem
