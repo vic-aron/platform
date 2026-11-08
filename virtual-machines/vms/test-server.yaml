@@ -64,7 +64,7 @@ spec:
               action: reset
           interfaces:
             - name: eth0
-              bridge: {}
+              masquerade: {}
           disks:
             - name: os-disk
               disk:
