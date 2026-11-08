@@ -50,7 +50,7 @@ spec:
         firmware:
           bootloader:
             efi:
-              persistent: false
+              persistent: true
               secureBoot: false
         devices:
           autoattachVSOCK: true
