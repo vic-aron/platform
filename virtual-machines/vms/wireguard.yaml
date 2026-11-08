@@ -11,7 +11,7 @@ spec:
       spec:
         source:
           pvc:
-            name: debian-13-cloudimage-genriccloud
+            name: debian-13-cloudimage-genericcloud
             namespace: virtual-machines
         storage:
           storageClassName: openebs-localpv-zfs-block-delete
