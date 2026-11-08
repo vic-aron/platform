@@ -25,7 +25,7 @@ spec:
     architectureConfiguration:
       amd64:
         machineType: q35
-    vmStateStorageClass: openebs-localpv-zfs-vm-state
+    vmStateStorageClass: openebs-localpv-hostpath
     developerConfiguration:
       featureGates:
         - HostDevices
