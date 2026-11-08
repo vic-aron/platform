@@ -117,25 +117,6 @@ volumeBindingMode: WaitForFirstConsumer
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: openebs-localpv-zfs-vm-state
-allowVolumeExpansion: true
-reclaimPolicy: Delete
-parameters:
-  recordsize: "128k"
-  compression: "lz4"
-  dedup: "off"
-  fstype: "zfs"
-  poolname: "tank"
-  atime: "off"
-  thinProvision: "yes"
-  logbias: "throughput"
-  quotatype: "refquota"
-provisioner: zfs.csi.openebs.io
-volumeBindingMode: Immediate
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
   name: openebs-localpv-zfs-block-retain
 provisioner: zfs.csi.openebs.io
 allowVolumeExpansion: true
