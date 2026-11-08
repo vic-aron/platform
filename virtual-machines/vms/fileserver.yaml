@@ -7,7 +7,7 @@ spec:
   runStrategy: Always
   dataVolumeTemplates:
     - metadata:
-        name: os-volume
+        name: fileserver-os-volume
       spec:
         source:
           pvc:
@@ -83,7 +83,7 @@ spec:
       volumes:
         - name: os-disk
           dataVolume:
-            name: os-volume
+            name: fileserver-os-volume
         - name: ci-disk
           cloudInitNoCloud:
             secretRef:
