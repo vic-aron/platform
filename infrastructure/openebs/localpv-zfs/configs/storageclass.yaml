@@ -130,9 +130,8 @@ parameters:
   thinProvision: "yes"
   logbias: "throughput"
   quotatype: "refquota"
-  shared: "yes"
 provisioner: zfs.csi.openebs.io
-volumeBindingMode: WaitForFirstConsumer
+volumeBindingMode: Immediate
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
