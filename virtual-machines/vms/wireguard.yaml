@@ -49,7 +49,9 @@ spec:
             hidden: false
         firmware:
           bootloader:
-            bios: {}
+            efi:
+              persistent: false
+              secureBoot: false
         devices:
           autoattachVSOCK: true
           networkInterfaceMultiqueue: true

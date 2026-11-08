@@ -30,6 +30,7 @@ spec:
     spec:
       domain:
         clock:
+          timer: {}
           utc: {}
         resources:
           requests:
@@ -49,7 +50,9 @@ spec:
             hidden: false
         firmware:
           bootloader:
-            bios: {}
+            efi:
+              persistent: false
+              secureBoot: false
         devices:
           hostDevices:
             - name: hba
