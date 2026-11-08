@@ -12,7 +12,7 @@ labels:
     includeSelectors: false
     includeTemplates: false
 resources:
-  - vm1.yaml
-  - vm2.yaml
-  - vm3.yaml
+  - wireguard.yaml
+  - fileserver.yaml
+  - test-server.yaml
   - datavolume.yaml

@@ -25,11 +25,11 @@ spec:
   sourceRef:
     kind: ExternalArtifact
     name: virtual-machines
-  path: "./virtual-machines/wireguard"
+  path: "./virtual-machines/vms"
   prune: true
   wait: true
   timeout: 5m
   dependsOn:
-    - name: kubevirt
     - name: cdi-configs
+    - name: cdi-storageprofiles
     - name: virtual-machines-namespace

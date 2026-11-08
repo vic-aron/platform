@@ -2,3 +2,63 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: virtual-machines
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: virtual-machines
+  namespace: virtual-machines
+spec:
+  hard:
+    requests.cpu: "32"
+    requests.memory: 64Gi
+    requests.storage: 2Ti
+    persistentvolumeclaims: "20"
+    pods: "40"
+    services: "20"
+    count/virtualmachines.kubevirt.io: "20"
+    count/datavolumes.cdi.kubevirt.io: "20"
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: virtual-machines
+  namespace: virtual-machines
+spec:
+  limits:
+    - type: PersistentVolumeClaim
+      min:
+        storage: 1Gi
+      max:
+        storage: 500Gi
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: NetworkPolicy
+#metadata:
+#  name: default-deny-all
+#  namespace: virtual-machines
+#spec:
+#  podSelector: {}
+#  policyTypes:
+#    - Ingress
+#    - Egress
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: NetworkPolicy
+#metadata:
+#  name: allow-dns
+#  namespace: virtual-machines
+#spec:
+#  podSelector: {}
+#  policyTypes:
+#    - Egress
+#  egress:
+#    - to:
+#        - namespaceSelector:
+#            matchLabels:
+#              kubernetes.io/metadata.name: kube-system
+#      ports:
+#        - protocol: UDP
+#          port: 53
+#        - protocol: TCP
+#          port: 53
