@@ -28,3 +28,14 @@ spec:
     ref: "refs/heads/main"
     path: "clusters/production"
     pullSecret: "flux-git-auth"
+  kustomize:
+    patches:
+      - patch: |
+          - op: add
+            path: /spec/decryption
+            value:
+              provider: sops
+              secretRef:
+                name: sops-age
+        target:
+          kind: Kustomization
