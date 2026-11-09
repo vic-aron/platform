@@ -10,4 +10,4 @@ spec:
     operation: copy
   url: oci://ghcr.io/timothymiller/cloudflare-ddns
   ref:
-    semver: "*"
+    semver: "0.2.x"
