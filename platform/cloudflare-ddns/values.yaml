@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflare-ddns-values
+  namespace: platform
+  labels:
+    reconcile.fluxcd.io/watch: Enabled
+data:
+  values.yaml: |
+    # values.yaml
+    cloudflare:
+      existingSecret: cloudflare-ddns        # or existingSecret: my-secret
+
+    domains: shinoval.work
+    ip6Provider: cloudflare.trace     # "none" for IPv4 only (then hostNetwork: false is fine)
+    proxied: "false"
+
+    shoutrrr: |
+      discord://token@webhook-id
+    healthchecks: https://hc-ping.com/your-uuid

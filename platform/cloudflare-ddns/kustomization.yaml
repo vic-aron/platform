@@ -12,5 +12,7 @@ labels:
     includeSelectors: false
     includeTemplates: false
 resources:
-  - deployment.yaml
+  - helmrelease.yaml
+  - ocirepository.yaml
+  - values.yaml
   - secret.yaml
