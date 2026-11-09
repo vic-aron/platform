@@ -14,7 +14,3 @@ data:
     domains: shinoval.work
     ip6Provider: cloudflare.trace     # "none" for IPv4 only (then hostNetwork: false is fine)
     proxied: "false"
-
-    shoutrrr: |
-      discord://token@webhook-id
-    healthchecks: https://hc-ping.com/your-uuid
