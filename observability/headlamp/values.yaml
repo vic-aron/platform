@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: headlamp-values
+  namespace: kube-system
+  labels:
+    reconcile.fluxcd.io/watch: Enabled
+data:
+  values.yaml: |
+    pluginsManager:
+      # -- Enable plugin manager
+      enabled: true

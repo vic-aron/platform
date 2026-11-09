@@ -15,3 +15,4 @@ resources:
   - helmrepository.yaml
   - helmrelease.yaml
   - service.yaml
+  - values.yaml

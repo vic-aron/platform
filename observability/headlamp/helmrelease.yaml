@@ -31,3 +31,8 @@ spec:
     enable: true
   driftDetection:
     mode: enabled
+  valuesFrom:
+    - kind: ConfigMap
+      name: headlamp-values
+      valuesKey: values.yaml
+      optional: false
