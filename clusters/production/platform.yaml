@@ -100,3 +100,20 @@ spec:
     - name: kubevirt
     - name: cdi-configs
     - name: capi
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: platform-dns
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: ExternalArtifact
+    name: platform
+  path: "./platform/platform-dns"
+  prune: true
+  wait: true
+  timeout: 5m
+  dependsOn:
+    - name: metallb
