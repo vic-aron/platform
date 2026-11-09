@@ -19,3 +19,24 @@ spec:
       port: 80
       targetPort: 3000
       protocol: TCP
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  secretName: grafana-tls
+  issuerRef:
+    name: platform-ca-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+  dnsNames:
+    - grafana.home.arpa
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth

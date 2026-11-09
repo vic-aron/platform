@@ -19,3 +19,24 @@ spec:
       port: 80
       targetPort: 4466
       protocol: TCP
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: headlamp
+  namespace: kube-system
+spec:
+  secretName: headlamp-tls
+  issuerRef:
+    name: platform-ca-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+  dnsNames:
+    - headlamp.home.arpa
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
