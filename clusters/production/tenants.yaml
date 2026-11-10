@@ -7,7 +7,7 @@ spec:
   interval: 10m
   sourceRef:
     kind: ExternalArtifact
-    name: platform
+    name: tenants
   path: "./tenants/tenant-1"
   prune: true
   wait: true
