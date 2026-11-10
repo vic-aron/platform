@@ -1,5 +1,7 @@
 apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
 kind: KubevirtClusterTemplate
+metadata:
+  name: cluster
 spec:
   template:
     spec:
