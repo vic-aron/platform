@@ -1,0 +1,162 @@
+apiVersion: cluster.x-k8s.io/v1beta2
+kind: ClusterClass
+metadata:
+  name: clusterclass-v1
+  namespace: tenant-1
+spec:
+  kubernetesVersions:
+    - "1.36.0"
+    - "1.37.0"
+    - "1.38.0"
+  infrastructure:
+    templateRef:
+      kind: KubevirtClusterTemplate
+      name: capi-kubevirt-cluster
+      apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
+    naming:
+      template: "{{ .cluster.name }}-{{ .random }}"
+  controlPlane:
+    templateRef:
+      kind: KubeadmControlPlaneTemplate
+      name: controlplane-v1
+      apiVersion: controlplane.cluster.x-k8s.io/v1beta2
+    machineInfrastructure:
+      templateRef:
+        kind: KubevirtMachineTemplate
+        name: controlplane-v1
+        apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
+    naming:
+      template: "{{ .cluster.name }}-{{ .machineDeployment.topologyName }}-{{ .random }}"
+    healthCheck:
+      checks:
+        nodeStartupTimeoutSeconds: 900
+        unhealthyNodeConditions:
+          - type: Ready
+            status: Unknown
+            timeoutSeconds: 300
+          - type: Ready
+            status: "False"
+            timeoutSeconds: 300
+        unhealthyMachineConditions:
+          - type: "NodeReady"
+            status: Unknown
+            timeoutSeconds: 1800
+          - type: "InfrastructureReady"
+            status: "False"
+            timeoutSeconds: 1800
+      remediation:
+        triggerIf:
+          unhealthyLessThanOrEqualTo: 33%
+  workers:
+    machineDeployments:
+      - class: worker-medium-v1
+        metadata:
+          annotations:
+            cluster.x-k8s.io/cluster-api-autoscaler-node-group-min-size: "2"
+            cluster.x-k8s.io/cluster-api-autoscaler-node-group-max-size: "5"
+        bootstrap:
+          templateRef:
+            kind: KubeadmConfigTemplate
+            name: kubeadmconfig-v1
+            apiVersion: bootstrap.cluster.x-k8s.io/v1beta2
+        infrastructure:
+          templateRef:
+            kind: KubevirtMachineTemplate
+            name: worker-medium-v1
+            apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
+        naming:
+          template: "{{ .cluster.name }}-kcp-medium-{{ .random }}"
+        healthCheck:
+          checks:
+            nodeStartupTimeoutSeconds: 600
+            unhealthyNodeConditions:
+              - type: Ready
+                status: Unknown
+                timeoutSeconds: 300
+              - type: Ready
+                status: "False"
+                timeoutSeconds: 300
+            unhealthyMachineConditions:
+              - type: NodeReady
+                status: Unknown
+                timeoutSeconds: 1800
+              - type: InfrastructureReady
+                status: "False"
+                timeoutSeconds: 1800
+          remediation:
+            triggerIf:
+              unhealthyInRange: "[0-2]"
+      - class: worker-large-v1
+        metadata:
+          annotations:
+            cluster.x-k8s.io/cluster-api-autoscaler-node-group-min-size: "2"
+            cluster.x-k8s.io/cluster-api-autoscaler-node-group-max-size: "5"
+        bootstrap:
+          templateRef:
+            kind: KubeadmConfigTemplate
+            name: kubeadmconfig-v1
+            apiVersion: bootstrap.cluster.x-k8s.io/v1beta2
+        infrastructure:
+          templateRef:
+            kind: KubevirtMachineTemplate
+            name: worker-medium-v1
+            apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
+        naming:
+          template: "{{ .cluster.name }}-kcp-large-{{ .random }}"
+        healthCheck:
+          checks:
+            nodeStartupTimeoutSeconds: 600
+            unhealthyNodeConditions:
+              - type: Ready
+                status: Unknown
+                timeoutSeconds: 300
+              - type: Ready
+                status: "False"
+                timeoutSeconds: 300
+            unhealthyMachineConditions:
+              - type: NodeReady
+                status: Unknown
+                timeoutSeconds: 1800
+              - type: InfrastructureReady
+                status: "False"
+                timeoutSeconds: 1800
+          remediation:
+            triggerIf:
+              unhealthyInRange: "[0-2]"
+      - class: worker-small-v1
+        metadata:
+          annotations:
+            cluster.x-k8s.io/cluster-api-autoscaler-node-group-min-size: "2"
+            cluster.x-k8s.io/cluster-api-autoscaler-node-group-max-size: "5"
+        bootstrap:
+          templateRef:
+            kind: KubeadmConfigTemplate
+            name: kubeadmconfig-v1
+            apiVersion: bootstrap.cluster.x-k8s.io/v1beta2
+        infrastructure:
+          templateRef:
+            kind: KubevirtMachineTemplate
+            name: worker-medium-v1
+            apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
+        naming:
+          template: "{{ .cluster.name }}-kcp-small-{{ .random }}"
+        healthCheck:
+          checks:
+            nodeStartupTimeoutSeconds: 600
+            unhealthyNodeConditions:
+              - type: Ready
+                status: Unknown
+                timeoutSeconds: 300
+              - type: Ready
+                status: "False"
+                timeoutSeconds: 300
+            unhealthyMachineConditions:
+              - type: NodeReady
+                status: Unknown
+                timeoutSeconds: 1800
+              - type: InfrastructureReady
+                status: "False"
+                timeoutSeconds: 1800
+          remediation:
+            triggerIf:
+              unhealthyInRange: "[0-2]"

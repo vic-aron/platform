@@ -1,0 +1,27 @@
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: ubuntu-2604-kubernetes-1360
+  namespace: tenant-1
+spec:
+  source:
+    upload: {}
+  storage:
+    storageClassName: openebs-localpv-zfs-block-delete
+    accessModes:
+      - ReadWriteOnce
+    volumeMode: Block
+    resources:
+      requests:
+        storage: 20Gi
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataSource
+metadata:
+  name: kubeadm-image
+  namespace: tenant-1
+spec:
+  source:
+    pvc:
+      name: ubuntu-2604-kubernetes-1360-v1
+      namespace: tenant-1

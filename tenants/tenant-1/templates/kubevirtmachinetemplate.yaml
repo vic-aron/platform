@@ -1,0 +1,309 @@
+apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
+kind: KubevirtMachineTemplate
+metadata:
+  name: controlplane-v1
+  namespace: tenant-1
+spec:
+  template:
+    spec:
+      virtualMachineBootstrapCheck:
+        checkStrategy: ssh
+      virtualMachineTemplate:
+        runStrategy: always
+        dataVolumeTemplates:
+          - metadata:
+              name: os-volume
+            spec:
+              sourceRef:
+                kind: DataSource
+                name: kubeadm-image
+                namespace: tenant-1
+              storage:
+                resources:
+                  requests: 20Gi
+                storageClassName: openebs-localpv-zfs-block-delete
+                accessModes:
+                  - ReadWriteOnce
+                volumeMode: Block
+        template:
+          spec:
+            domain:
+              cpu:
+                cores: 2
+              memory:
+                guest: 4Gi
+              networkInterfaceMultiqueue: true
+              machine:
+                type: q35
+              autoAttachMemBalloon: false
+              features:
+                kvm:
+                  hidden: false
+              firmware:
+                bootloader:
+                  efi:
+                    persistent: true
+                    secureBoot: false
+              networks:
+                - name: eth0
+                  pod: {}
+              devices:
+                rng: {}
+                watchdog:
+                  name: watchdog
+                  i6300esb:
+                    action: reset
+                interfaces:
+                  - name: eth0
+                    bridge: {}
+                disks:
+                  - name: os-disk
+                    disk:
+                      bus: virtio
+                    serial: kubevirt-os
+                    bootOrder: 1
+            volumes:
+              - name: os-disk
+                dataVolume:
+                  name: os-volume
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
+kind: KubevirtMachineTemplate
+metadata:
+  name: worker-small-v1
+  namespace: tenant-1
+spec:
+  template:
+    spec:
+      virtualMachineBootstrapCheck:
+        checkStrategy: ssh
+      virtualMachineTemplate:
+        runStrategy: always
+        dataVolumeTemplates:
+          - metadata:
+              name: os-volume
+            spec:
+              sourceRef:
+                kind: DataSource
+                name: kubeadm-image
+                namespace: tenant-1
+              storage:
+                resources:
+                  requests: 20Gi
+                storageClassName: openebs-localpv-zfs-block-delete
+                accessModes:
+                  - ReadWriteOnce
+                volumeMode: Block
+        template:
+          spec:
+            domain:
+              cpu:
+                cores: 2
+              memory:
+                guest: 4Gi
+              networkInterfaceMultiqueue: true
+              machine:
+                type: q35
+              autoAttachMemBalloon: false
+              features:
+                kvm:
+                  hidden: false
+              firmware:
+                bootloader:
+                  efi:
+                    persistent: true
+                    secureBoot: false
+              networks:
+                - name: eth0
+                  pod: {}
+              devices:
+                rng: {}
+                watchdog:
+                  name: watchdog
+                  i6300esb:
+                    action: reset
+                interfaces:
+                  - name: eth0
+                    bridge: {}
+                disks:
+                  - name: os-disk
+                    disk:
+                      bus: virtio
+                    serial: kubevirt-os
+                    bootOrder: 1
+            volumes:
+              - name: os-disk
+                dataVolume:
+                  name: os-volume
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
+kind: KubevirtMachineTemplate
+metadata:
+  name: worker-medium-v1
+  namespace: tenant-1
+spec:
+  template:
+    spec:
+      virtualMachineBootstrapCheck:
+        checkStrategy: ssh
+      virtualMachineTemplate:
+        runStrategy: always
+        dataVolumeTemplates:
+          - metadata:
+              name: os-volume
+            spec:
+              sourceRef:
+                kind: DataSource
+                name: kubeadm-image
+                namespace: tenant-1
+              storage:
+                resources:
+                  requests: 20Gi
+                storageClassName: openebs-localpv-zfs-block-delete
+                accessModes:
+                  - ReadWriteOnce
+                volumeMode: Block
+          - metadata:
+              name: csi-volume
+            spec:
+              storage:
+                resources:
+                  requests: 40Gi
+                storageClassName: openebs-localpv-zfs-block-delete
+                accessModes:
+                  - ReadWriteOnce
+                volumeMode: Block
+        template:
+          spec:
+            domain:
+              cpu:
+                cores: 4
+              memory:
+                guest: 8Gi
+              networkInterfaceMultiqueue: true
+              machine:
+                type: q35
+              autoAttachMemBalloon: false
+              features:
+                kvm:
+                  hidden: false
+              firmware:
+                bootloader:
+                  efi:
+                    persistent: true
+                    secureBoot: false
+              networks:
+                - name: eth0
+                  pod: {}
+              devices:
+                rng: {}
+                watchdog:
+                  name: watchdog
+                  i6300esb:
+                    action: reset
+                interfaces:
+                  - name: eth0
+                    bridge: {}
+                disks:
+                  - name: os-disk
+                    disk:
+                      bus: virtio
+                    serial: kubevirt-os
+                    bootOrder: 1
+                  - name: csi-disk
+                    disk:
+                      bus: virtio
+                    serial: kubevirt-csi
+            volumes:
+              - name: os-disk
+                dataVolume:
+                  name: os-volume
+              - name: csi-disk
+                dataVolume:
+                  name: csi-volume
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
+kind: KubevirtMachineTemplate
+metadata:
+  name: worker-large-v1
+  namespace: tenant-1
+spec:
+  template:
+    spec:
+      virtualMachineBootstrapCheck:
+        checkStrategy: ssh
+      virtualMachineTemplate:
+        runStrategy: always
+        dataVolumeTemplates:
+          - metadata:
+              name: os-volume
+            spec:
+              sourceRef:
+                kind: DataSource
+                name: kubeadm-image
+                namespace: tenant-1
+              storage:
+                resources:
+                  requests: 20Gi
+                storageClassName: openebs-localpv-zfs-block-delete
+                accessModes:
+                  - ReadWriteOnce
+                volumeMode: Block
+          - metadata:
+              name: csi-volume
+            spec:
+              storage:
+                resources:
+                  requests: 40Gi
+                storageClassName: openebs-localpv-zfs-block-delete
+                accessModes:
+                  - ReadWriteOnce
+                volumeMode: Block
+        template:
+          spec:
+            domain:
+              cpu:
+                cores: 6
+              memory:
+                guest: 12Gi
+              networkInterfaceMultiqueue: true
+              machine:
+                type: q35
+              autoAttachMemBalloon: false
+              features:
+                kvm:
+                  hidden: false
+              firmware:
+                bootloader:
+                  efi:
+                    persistent: true
+                    secureBoot: false
+              networks:
+                - name: eth0
+                  pod: {}
+              devices:
+                rng: {}
+                watchdog:
+                  name: watchdog
+                  i6300esb:
+                    action: reset
+                interfaces:
+                  - name: eth0
+                    bridge: {}
+                disks:
+                  - name: os-disk
+                    disk:
+                      bus: virtio
+                    serial: kubevirt-os
+                    bootOrder: 1
+                  - name: csi-disk
+                    disk:
+                      bus: virtio
+                    serial: kubevirt-csi
+            volumes:
+              - name: os-disk
+                dataVolume:
+                  name: os-volume
+              - name: csi-disk
+                dataVolume:
+                  name: csi-volume

@@ -61,3 +61,19 @@ spec:
       copy:
         - from: "@repo/observability/**"
           to: "@artifact/observability/"
+---
+apiVersion: source.extensions.fluxcd.io/v1beta1
+kind: ArtifactGenerator
+metadata:
+  name: tenants
+  namespace: flux-system
+spec:
+  sources:
+    - alias: repo
+      kind: GitRepository
+      name: flux-system
+  artifacts:
+    - name: tenants
+      copy:
+        - from: "@repo/tenants/**"
+          to: "@artifact/tenants/"

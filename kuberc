@@ -1,0 +1,29 @@
+apiVersion: kubectl.config.k8s.io/v1beta1
+kind: Preference
+defaults:
+- command: delete
+  options:
+    - name: interactive
+      default: "true"
+aliases:
+- name: debug
+  command: run
+  options:
+    - name: image
+      default: busybox
+    - name: namespace
+      default: default
+- name: vmi
+  command: get
+  prependArgs:
+      - vmi
+  options:
+    - name: output
+      default: wide
+- name: vm
+  command: get
+  prependArgs:
+      - vm
+  options:
+    - name: output
+      default: wide

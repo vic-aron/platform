@@ -1,0 +1,39 @@
+apiVersion: controlplane.cluster.x-k8s.io/v1beta2
+kind: KubeadmControlPlaneTemplate
+metadata:
+  name: controlplane-v1
+  namespace: tenant-1
+spec:
+  template:
+    spec:
+      kubeadmConfigSpec:
+        clusterConfiguration:
+          apiServer:
+            certSANs:
+              - "tenant-1.home.arpa"
+          encryptionAlgorithm: ECDSA-P256
+        initConfiguration:
+          skipPhases:
+            - "addon/kube-proxy"
+          nodeRegistration:
+            criSocket: unix:///run/containerd/containerd.sock
+        joinConfiguration:
+          skipPhases:
+            - "addon/kube-proxy"
+          nodeRegistration:
+            criSocket: unix:///run/containerd/containerd.sock
+        users:
+          - name: daniel
+            gecos: kubernetes-privileged-user
+            groups: sudo
+            sudo: "ALL=(ALL:ALL) ALL"
+            lockPassword: true
+            sshAuthorizedKeys:
+              - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPRP7m16Hk4/rPlbBt31Jo2o5Be8JdUZUJr1dYVrTLQn daniel"
+        ntp:
+          servers:
+            - "0.pool.ntp.org"
+            - "1.pool.ntp.org"
+            - "2.pool.ntp.org"
+            - "3.pool.ntp.org"
+          enabled: true

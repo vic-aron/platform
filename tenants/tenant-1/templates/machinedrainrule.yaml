@@ -1,0 +1,25 @@
+apiVersion: cluster.x-k8s.io/v1beta2
+kind: MachineDrainRule
+metadata:
+  name: drain-managed-namespaces-first
+spec:
+  pods:
+    - selector:
+        matchLabels:
+          app.kubernetes.io/part-of: applications
+  drain:
+    behavior: Drain
+    order: -100
+---
+apiVersion: cluster.x-k8s.io/v1beta2
+kind: MachineDrainRule
+metadata:
+  name: openebs-mayastor-last
+spec:
+  pods:
+    - selector:
+        matchLabels:
+          app.kubernetes.io/part-of: storage
+  drain:
+    behavior: Drain
+    order: 100

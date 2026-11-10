@@ -1,0 +1,137 @@
+apiVersion: addons.cluster.x-k8s.io/v1alpha1
+kind: HelmChartProxy
+metadata:
+  name: cilium
+spec:
+  clusterSelector:
+    matchLabels:
+      cilium: enabled
+  releaseName: cilium
+  repoURL: https://helm.cilium.io
+  chartName: cilium
+  version: "1.20.2"
+  namespace: kube-system
+  reconcileStrategy: InstallOnce
+  valuesTemplate: |
+    rollOutCiliumPods: true
+    bandwidthManager:
+      enabled: false
+      bbr: false
+      bbrHostNamespaceOnly: false
+    encryption:
+      enabled: false
+      type: wireguard
+      wireguard:
+        persistentKeepalive: 25s
+    hubble:
+      relay:
+        enabled: false
+        replicas: 1
+      ui:
+        enabled: false
+        replicas: 1
+    operator:
+      enabled: true
+      rollOutPods: true
+      replicas: 1
+---
+apiVersion: addons.cluster.x-k8s.io/v1alpha1
+kind: HelmChartProxy
+metadata:
+  name: metrics-server
+spec:
+  clusterSelector:
+    matchLabels:
+      metrics-server: enabled
+  releaseName: metrics-server
+  repoURL: https://kubernetes-sigs.github.io/metrics-server
+  chartName: metrics-server
+  version: "3.14.0"
+  namespace: kube-system
+  reconcileStrategy: InstallOnce
+  valuesTemplate: |
+    replicas: 1
+---
+apiVersion: addons.cluster.x-k8s.io/v1alpha1
+kind: HelmChartProxy
+metadata:
+  name: cert-manager
+spec:
+  clusterSelector:
+    matchLabels:
+      cert-manager: enabled
+  releaseName: cert-manager
+  repoURL: https://charts.jetstack.io
+  chartName: cert-manager
+  version: "1.21.2"
+  namespace: cert-manager
+  reconcileStrategy: InstallOnce
+  valuesTemplate: |
+    crds:
+      enabled: true
+    replicaCount: 1
+    webhook:
+      replicaCount: 1
+    cainjector:
+      replicaCount: 1
+---
+apiVersion: addons.cluster.x-k8s.io/v1alpha1
+kind: HelmChartProxy
+metadata:
+  name: openebs-mayastor
+spec:
+  clusterSelector:
+    matchLabels:
+      openebs-mayastor: enabled
+  releaseName: mayastor
+  repoURL: https://openebs.github.io/mayastor-extensions
+  chartName: mayastor
+  version: "v2.12.1"
+  namespace: openebs
+  reconcileStrategy: InstallOnce
+  valuesTemplate: |
+    localpv-provisioner:
+      enabled: true
+    storageClass:
+      enabled: true
+      nameSuffix: single-replica
+      default: false
+      allowVolumeExpansion: true
+      parameters:
+        protocol: nvmf
+        repl: 1
+---
+apiVersion: addons.cluster.x-k8s.io/v1alpha1
+kind: HelmChartProxy
+metadata:
+  name: descheduler
+spec:
+  clusterSelector:
+    matchLabels:
+      descheduler: enabled
+  releaseName: descheduler
+  repoURL: https://kubernetes-sigs.github.io/descheduler
+  chartName: descheduler
+  version: "0.36.0"
+  namespace: kube-system
+  reconcileStrategy: InstallOnce
+  valuesTemplate: |
+    schedule: "*/5 * * * *"
+---
+apiVersion: addons.cluster.x-k8s.io/v1alpha1
+kind: HelmChartProxy
+metadata:
+  name: kured
+spec:
+  clusterSelector:
+    matchLabels:
+      kured: enabled
+  releaseName: kured
+  repoURL: https://kubereboot.github.io/charts
+  chartName: kured
+  version: "6.1.0"
+  namespace: kube-system
+  reconcileStrategy: InstallOnce
+  valuesTemplate: |
+    configuration:
+      period: "1h0m0s"
