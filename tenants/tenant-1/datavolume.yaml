@@ -1,7 +1,7 @@
 apiVersion: cdi.kubevirt.io/v1beta1
 kind: DataVolume
 metadata:
-  name: ubuntu-2604-kubernetes-1360
+  name: ubuntu-2604-kubernetes-1360-v1
   namespace: tenant-1
 spec:
   source:
