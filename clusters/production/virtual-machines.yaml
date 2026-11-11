@@ -29,7 +29,7 @@ spec:
   sourceRef:
     kind: ExternalArtifact
     name: virtual-machines
-  path: "./virtual-machines/vms"
+  path: "./virtual-machines"
   prune: true
   wait: true
   timeout: 5m
