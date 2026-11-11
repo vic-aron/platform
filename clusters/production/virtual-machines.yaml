@@ -1,19 +1,23 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: virtual-machines-namespace
+  name: storageprofiles
   namespace: flux-system
 spec:
   interval: 10m
   sourceRef:
     kind: ExternalArtifact
-    name: virtual-machines
-  path: "./virtual-machines/namespace"
+    name: infrastructure
+  path: "./infrastructure/cdi/storageprofiles"
   prune: true
   wait: true
   timeout: 5m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   dependsOn:
-    - name: kubevirt
+    - name: infrastructure-configs
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -29,7 +33,10 @@ spec:
   prune: true
   wait: true
   timeout: 5m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   dependsOn:
-    - name: cdi-configs
-    - name: cdi-storageprofiles
-    - name: virtual-machines-namespace
+    - name: infrastructure-configs
+    - name: storageprofiles

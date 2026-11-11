@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: platform-dns-lb
+  namespace: platform
+  annotations:
+    metallb.io/loadBalancerIPs: 10.212.212.88
+spec:
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 3600
+  selector:
+    app.kubernetes.io/name: platform-dns
+  ports:
+    - name: dns-udp
+      port: 53
+      targetPort: 53
+      protocol: UDP
+    - name: dns-tcp
+      port: 53
+      targetPort: 53
+      protocol: TCP

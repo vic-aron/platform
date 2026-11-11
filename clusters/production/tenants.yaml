@@ -12,7 +12,10 @@ spec:
   prune: true
   wait: true
   timeout: 5m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   dependsOn:
-    - name: capi-configs
-    - name: cdi-storageprofiles
-    - name: kubevirt
+    - name: infrastructure-configs
+  suspend: true

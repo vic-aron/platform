@@ -1,0 +1,220 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: fileserver
+  namespace: virtual-machines
+spec:
+  runStrategy: Always
+  dataVolumeTemplates:
+    - metadata:
+        name: fileserver-os-volume
+      spec:
+        source:
+          pvc:
+            name: debian-13-cloudimage-generic
+            namespace: virtual-machines
+        storage:
+          storageClassName: openebs-localpv-zfs-block-delete
+          accessModes:
+            - ReadWriteOnce
+          volumeMode: Block
+          resources:
+            requests:
+              storage: 10Gi
+  template:
+    metadata:
+      labels:
+        kubevirt.io/vm: fileserver
+    spec:
+      domain:
+        clock:
+          timer: {}
+          utc: {}
+        resources:
+          requests:
+            cpu: 2
+            memory: 9Gi
+        cpu:
+          cores: 2
+          model: host-passthrough
+        memory:
+          guest: 8Gi
+        machine:
+          type: q35
+        features:
+          smm:
+            enabled: false
+          kvm:
+            hidden: false
+        firmware:
+          bootloader:
+            efi:
+              persistent: true
+              secureBoot: false
+        devices:
+          hostDevices:
+            - name: hba
+              deviceName: devices.kubevirt.io/hba
+          autoattachVSOCK: true
+          networkInterfaceMultiqueue: true
+          autoattachSerialConsole: true
+          autoattachGraphicsDevice: false
+          autoattachMemBalloon: false
+          rng: {}
+          watchdog:
+            name: watchdog
+            i6300esb:
+              action: reset
+          interfaces:
+            - name: eth0
+              masquerade: {}
+          disks:
+            - name: os-disk
+              disk:
+                bus: virtio
+              serial: kubevirt-os
+              bootOrder: 1
+            - name: ci-disk
+              disk:
+                bus: virtio
+      networks:
+        - name: eth0
+          pod: {}
+      volumes:
+        - name: os-disk
+          dataVolume:
+            name: fileserver-os-volume
+        - name: ci-disk
+          cloudInitNoCloud:
+            secretRef:
+              name: fileserver-cloudinit
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fileserver-cloudinit
+  namespace: virtual-machines
+type: Opaque
+stringData:
+  userdata: |
+    #cloud-config
+    hostname: fileserver
+
+    # Users
+    users:
+      - name: daniel
+        groups: [sudo]
+        shell: /bin/bash
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        ssh_authorized_keys:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPRP7m16Hk4/rPlbBt31Jo2o5Be8JdUZUJr1dYVrTLQn daniel
+
+    # Keyboard
+    keyboard:
+      layout: de
+      model: pc105
+      variant: nodeadkeys
+
+    # Locales
+    locale: en_US.UTF-8
+    timezone: Europe/Berlin
+
+    # Debian repositories
+    runcmd:
+      # Services
+      - [systemctl, enable, --now, qemu-guest-agent.service]
+      - [systemctl, enable, --now, nfs-kernel-server.service]
+
+    # APT
+    apt:
+      preserve_source_list: true
+      sources_list: |
+        Types: deb
+        URIs: http://deb.debian.org/debian
+        Suites: trixie trixie-updates
+        Components: main contrib non-free-firmware
+        Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+        Types: deb deb-src
+        URIs: mirror+file:///etc/apt/mirrors/debian.list
+        Suites: trixie trixie-updates trixie-backports
+        Components: main contrib non-free-firmware
+        Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+        Types: deb deb-src
+        URIs: mirror+file:///etc/apt/mirrors/debian-security.list
+        Suites: trixie-security
+        Components: main contrib non-free-firmware
+        Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+    # Packages
+    package_reboot_if_required: true
+    package_update: true
+    package_upgrade: true
+    packages:
+      # Networking
+      - curl
+      - wget
+      - dnsutils
+      - iproute2
+      - traceroute
+
+      # System utilities
+      - qemu-guest-agent
+      - locales
+      - sudo
+      - vim
+      - git
+      - htop
+      - tmux
+      - rsync
+      - unzip
+      - bash-completion
+      - bat
+      - eza
+      - util-linux
+      - procps
+      - coreutils
+      - kmod
+      - pciutils
+
+      # ZFS
+      - linux-image-amd64
+      - linux-headers-amd64
+      - zfs-dkms
+      - zfs-zed
+      - zfsutils-linux
+      - nfs-kernel-server
+
+      # Security
+      - ca-certificates
+      - openssh-server
+      - nftables
+
+    write_files:
+      - path: /etc/modules-load.d/zfs.conf
+        owner: root:root
+        permissions: '0644'
+        content: |
+          zfs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fileserver
+  namespace: virtual-machines
+  annotations:
+    metallb.io/loadBalancerIPs: 10.212.212.50
+spec:
+  type: LoadBalancer
+  selector:
+    vm.kubevirt.io/name: fileserver
+  ports:
+    - name: ssh
+      port: 22
+      targetPort: 22
+      protocol: TCP
+    - name: nfs
+      port: 2049
+      targetPort: 2049
+      protocol: TCP

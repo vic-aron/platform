@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - openebs
+  - kube-ovn-v2
+  - cert-manager
+  - metrics-server
+  - kubelet-csr-approver
+  - kubevirt
+  - cdi
+  - capi
+  - metallb
+  - reloader
+  - vpa
+  - envoy-gateway
+  - headlamp
+  - kube-prometheus-stack
+  - cloudflare-ddns

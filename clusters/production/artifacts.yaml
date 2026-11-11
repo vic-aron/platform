@@ -17,22 +17,6 @@ spec:
 apiVersion: source.extensions.fluxcd.io/v1beta1
 kind: ArtifactGenerator
 metadata:
-  name: platform
-  namespace: flux-system
-spec:
-  sources:
-    - alias: repo
-      kind: GitRepository
-      name: flux-system
-  artifacts:
-    - name: platform
-      copy:
-        - from: "@repo/platform/**"
-          to: "@artifact/platform/"
----
-apiVersion: source.extensions.fluxcd.io/v1beta1
-kind: ArtifactGenerator
-metadata:
   name: virtual-machines
   namespace: flux-system
 spec:
@@ -45,22 +29,6 @@ spec:
       copy:
         - from: "@repo/virtual-machines/**"
           to: "@artifact/virtual-machines/"
----
-apiVersion: source.extensions.fluxcd.io/v1beta1
-kind: ArtifactGenerator
-metadata:
-  name: observability
-  namespace: flux-system
-spec:
-  sources:
-    - alias: repo
-      kind: GitRepository
-      name: flux-system
-  artifacts:
-    - name: observability
-      copy:
-        - from: "@repo/observability/**"
-          to: "@artifact/observability/"
 ---
 apiVersion: source.extensions.fluxcd.io/v1beta1
 kind: ArtifactGenerator

@@ -1,0 +1,31 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: envoy-gateway
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: public-gateway
+  namespace: envoy-gateway-system
+spec:
+  gatewayClassName: envoy-gateway
+  listeners:
+    - name: https
+      hostname: registry.home.arpa
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: registry-tls
+            namespace: envoy-gateway-system
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              platform.shinoval.work/gateway-access: "public"

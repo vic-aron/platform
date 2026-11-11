@@ -1,0 +1,13 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: cloudflare-ddns
+  namespace: ddns
+spec:
+  interval: 24h
+  layerSelector:
+    mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
+    operation: copy
+  url: oci://ghcr.io/timothymiller/cloudflare-ddns
+  ref:
+    semver: "0.2.x"

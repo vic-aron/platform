@@ -1,0 +1,33 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cloudflare-ddns
+  namespace: ddns
+spec:
+  interval: 15m
+  timeout: 5m
+  chartRef:
+    kind: OCIRepository
+    name: cloudflare-ddns
+    namespace: ddns
+  releaseName: cloudflare-ddns
+  install:
+    crds: Create
+    createNamespace: false
+    strategy:
+      name: RetryOnFailure
+      retryInterval: 5m
+  upgrade:
+    crds: CreateReplace
+    strategy:
+      name: RetryOnFailure
+      retryInterval: 5m
+  test:
+    enable: true
+  driftDetection:
+    mode: enabled
+  valuesFrom:
+    - kind: ConfigMap
+      name: cloudflare-ddns-values
+      valuesKey: values.yaml
+      optional: false

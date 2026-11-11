@@ -1,241 +1,39 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: kube-ovn-v2
+  name: infrastructure-controller
   namespace: flux-system
 spec:
   interval: 10m
   sourceRef:
     kind: ExternalArtifact
     name: infrastructure
-  path: "./infrastructure/kube-ovn-v2"
-  prune: false
-  wait: false
+  path: "./infrastructure/controller"
+  prune: true
+  wait: true
   timeout: 5m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cert-manager
+  name: infrastructure-configs
   namespace: flux-system
 spec:
   interval: 10m
   sourceRef:
     kind: ExternalArtifact
     name: infrastructure
-  path: "./infrastructure/cert-manager/controller"
+  path: "./infrastructure/configs"
   prune: true
   wait: true
   timeout: 5m
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: cert-manager-configs
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: infrastructure
-  path: "./infrastructure/cert-manager/configs"
-  prune: true
-  wait: true
-  timeout: 5m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   dependsOn:
-    - name: cert-manager
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: kubelet-csr-approver
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: infrastructure
-  path: "./infrastructure/kubelet-csr-approver"
-  prune: true
-  wait: true
-  timeout: 5m
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: metrics-server
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: infrastructure
-  path: "./infrastructure/metrics-server"
-  prune: true
-  wait: true
-  timeout: 5m
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: openebs-namespace
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: infrastructure
-  path: "./infrastructure/openebs/namespace"
-  prune: true
-  wait: true
-  timeout: 5m
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: openebs-localpv-zfs
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: infrastructure
-  path: "./infrastructure/openebs/localpv-zfs/controller"
-  prune: true
-  wait: true
-  timeout: 5m
-  dependsOn:
-    - name: openebs-namespace
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: openebs-localpv-zfs-configs
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: infrastructure
-  path: "./infrastructure/openebs/localpv-zfs/configs"
-  prune: true
-  wait: true
-  timeout: 5m
-  dependsOn:
-    - name: openebs-localpv-zfs
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: openebs-localpv-hostpath
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: infrastructure
-  path: "./infrastructure/openebs/localpv-hostpath/controller"
-  prune: true
-  wait: true
-  timeout: 5m
-  dependsOn:
-    - name: openebs-namespace
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: openebs-localpv-hostpath-configs
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: infrastructure
-  path: "./infrastructure/openebs/localpv-hostpath/configs"
-  prune: true
-  wait: true
-  timeout: 5m
-  dependsOn:
-    - name: openebs-localpv-hostpath
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: reloader
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: infrastructure
-  path: "./infrastructure/reloader"
-  prune: true
-  wait: true
-  timeout: 5m
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: vpa
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: infrastructure
-  path: "./infrastructure/vpa"
-  prune: true
-  wait: true
-  timeout: 5m
-  dependsOn:
-    - name: metrics-server
-    - name: kubelet-csr-approver
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: metallb
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: infrastructure
-  path: "./infrastructure/metallb/controller"
-  prune: true
-  wait: true
-  timeout: 5m
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: metallb-configs
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: infrastructure
-  path: "./infrastructure/metallb/configs"
-  prune: true
-  wait: true
-  timeout: 5m
-  dependsOn:
-    - name: metallb
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: envoy-gateway
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: ExternalArtifact
-    name: infrastructure
-  path: "./infrastructure/envoy-gateway"
-  prune: true
-  wait: true
-  timeout: 5m
-  dependsOn:
-    - name: metallb-configs
+    - name: infastructure-controller
