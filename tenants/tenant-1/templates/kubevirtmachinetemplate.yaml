@@ -19,14 +19,14 @@ spec:
                   kind: DataSource
                   name: kubeadm-image
                   namespace: tenant-1
-              storage:
-                storageClassName: openebs-localpv-zfs-block-delete
-                accessModes:
-                  - ReadWriteOnce
-                volumeMode: Block
-                resources:
-                  requests:
-                    storage: 20Gi
+                storage:
+                  storageClassName: openebs-localpv-zfs-block-delete
+                  accessModes:
+                    - ReadWriteOnce
+                  volumeMode: Block
+                  resources:
+                    requests:
+                      storage: 20Gi
           template:
             spec:
               domain:
