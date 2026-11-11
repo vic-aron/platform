@@ -7,7 +7,6 @@ resources:
   - cdi
   - capi
   - metallb
-  - envoy-gateway
   - headlamp
   - kube-prometheus-stack
   - platform-dns
