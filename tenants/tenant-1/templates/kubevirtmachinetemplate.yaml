@@ -19,20 +19,21 @@ spec:
                   kind: DataSource
                   name: kubeadm-image
                   namespace: tenant-1
-                storage:
-                  resources:
-                    requests: 20Gi
-                  storageClassName: openebs-localpv-zfs-block-delete
-                  accessModes:
-                    - ReadWriteOnce
-                  volumeMode: Block
+              storage:
+                storageClassName: openebs-localpv-zfs-block-delete
+                accessModes:
+                  - ReadWriteOnce
+                volumeMode: Block
+                resources:
+                  requests:
+                    storage: 20Gi
           template:
             spec:
               domain:
                 clock:
                   timer: {}
                   utc: {}
-                ressources:
+                resources:
                   requests:
                     cpu: 2
                     memory: 5Gi
@@ -103,19 +104,20 @@ spec:
                   name: kubeadm-image
                   namespace: tenant-1
                 storage:
-                  resources:
-                    requests: 20Gi
                   storageClassName: openebs-localpv-zfs-block-delete
                   accessModes:
                     - ReadWriteOnce
                   volumeMode: Block
+                  resources:
+                    requests:
+                      storage: 20Gi
           template:
             spec:
               domain:
                 clock:
                   timer: {}
                   utc: {}
-                ressources:
+                resources:
                   requests:
                     cpu: 2
                     memory: 5Gi
@@ -186,29 +188,31 @@ spec:
                   name: kubeadm-image
                   namespace: tenant-1
                 storage:
-                  resources:
-                    requests: 20Gi
                   storageClassName: openebs-localpv-zfs-block-delete
                   accessModes:
                     - ReadWriteOnce
                   volumeMode: Block
+                  resources:
+                    requests:
+                      storage: 20Gi
             - metadata:
                 name: csi-volume
               spec:
                 storage:
-                  resources:
-                    requests: 40Gi
                   storageClassName: openebs-localpv-zfs-block-delete
                   accessModes:
                     - ReadWriteOnce
                   volumeMode: Block
+                  resources:
+                    requests:
+                      storage: 40Gi
           template:
             spec:
               domain:
                 clock:
                   timer: {}
                   utc: {}
-                ressources:
+                resources:
                   requests:
                     cpu: 2
                     memory: 9Gi
@@ -286,29 +290,31 @@ spec:
                   name: kubeadm-image
                   namespace: tenant-1
                 storage:
-                  resources:
-                    requests: 20Gi
                   storageClassName: openebs-localpv-zfs-block-delete
                   accessModes:
                     - ReadWriteOnce
                   volumeMode: Block
+                  resources:
+                    requests:
+                      storage: 20Gi
             - metadata:
                 name: csi-volume
               spec:
                 storage:
-                  resources:
-                    requests: 40Gi
                   storageClassName: openebs-localpv-zfs-block-delete
                   accessModes:
                     - ReadWriteOnce
                   volumeMode: Block
+                  resources:
+                    requests:
+                      storage: 40Gi
           template:
             spec:
               domain:
                 clock:
                   timer: {}
                   utc: {}
-                ressources:
+                resources:
                   requests:
                     cpu: 4
                     memory: 13Gi
