@@ -11,6 +11,5 @@ labels:
     includeSelectors: false
     includeTemplates: false
 resources:
-  - namespace.yaml
   - localpv-zfs
   - localpv-hostpath
