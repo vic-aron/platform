@@ -36,4 +36,4 @@ spec:
     secretRef:
       name: sops-age
   dependsOn:
-    - name: infastructure-controller
+    - name: infrastructure-controller
